@@ -47,7 +47,6 @@ train_log*.txt
 *.cache
 
 # Output images/videos generated during inference
-*_hasil.*
 *.mp4
 *.avi
 *.mov
