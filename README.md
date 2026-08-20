@@ -52,6 +52,22 @@ Install the required Python packages:
 pip install ultralytics opencv-python
 ```
 
+## Download Model from Google Drive
+
+The recommended trained model is stored in Google Drive and is named `merged_best.pt`.
+
+- Google Drive folder: https://drive.google.com/drive/folders/1TpYLqy0NLaXq-XeoPMsomkt-K25bPUtk?hl=ID
+
+Download the file `merged_best.pt` and place it in the project root folder so the script can load it directly.
+
+Example:
+
+```bash
+python janjang_counter.py foto.jpg --model merged_best.pt --conf 0.25
+```
+
+This is the recommended model to use for validation and inference when you want the latest merged training result.
+
 ## Download Dataset from Roboflow
 
 This project can use the public Roboflow oil palm fruit bunch dataset:
@@ -94,21 +110,33 @@ This dataset is suitable for fruit bunch detection and can be used to retrain th
 
 ### 1. Run object detection on an image
 
+Recommended model:
+
 ```bash
-python janjang_counter.py image.jpg --model best.pt --classes 0,1,2,3,4 --conf 0.25
+python janjang_counter.py image.jpg --model merged_best.pt --conf 0.25
+```
+
+If you want to use an older checkpoint instead:
+
+```bash
+python janjang_counter.py image.jpg --model gcstech.pt --classes 0,1,2,3,4 --conf 0.25
 ```
 
 ### 2. Run detection on a video
 
 ```bash
-python janjang_counter.py --video input_video.mp4 --model best.pt --save
+python janjang_counter.py --video input_video.mp4 --model merged_best.pt --save
 ```
+
+This is the correct video mode for the current script. The `--save` flag saves the annotated output video beside the input file.
 
 ### 3. Use the webcam
 
 ```bash
-python janjang_counter.py --cam --model best.pt
+python janjang_counter.py --cam --model merged_best.pt
 ```
+
+This opens the live webcam stream and displays detections in real time. In the current implementation, webcam mode does not save a video file automatically.
 
 ### 4. Train a custom model
 
