@@ -32,17 +32,29 @@ The main workflow includes:
 
 ```text
 janjang-vision/
-├── janjang_counter.py      # Main detection and training script
-├── dataset/
-│   ├── dataset.yaml        # Dataset configuration for YOLO
-│   ├── images/
-│   └── labels/
-├── best.pt                 # Best custom trained model (if present)
-├── yolo11n.pt              # Pretrained base YOLO model
-├── runs/                   # Training and inference outputs
-├── README.md               # Project documentation
-└── train_log*.txt          # Training logs
+├── janjang_counter.py          # Main detection / training script
+├── janjang_train_merged.ipynb  # Notebook for merging Roboflow datasets and training
+├── janjang_colab.ipynb         # Notebook version for Colab workflow
+├── merged_best.pt              # Recommended merged model checkpoint
+├── gcstech.pt                  # Model checkpoint from gcstech dataset
+├── model_2.pt                  # Additional checkpoint
+├── SawitMVC.pt                 # Another trained checkpoint
+├── yolo11n.pt                  # Base YOLO11 pre-trained model
+├── ffb_check.jpg               # Example validation image
+├── foto_uji.png                # Sample test image
+├── runs/                       # YOLO training/inference outputs
+│   └── detect/
+├── README.md                   # Project documentation
+├── train_log.txt               # Training logs
+├── train_log_v2.txt            # Training logs v2
+├── train_log_v2full.txt        # Full training logs
+├── __pycache__/                # Python cache files
+├── .git/                       # Git metadata
+├── .vscode/                    # editor config
+└── .gitignore
 ```
+
+Note: the project currently uses root-level checkpoints and output folders rather than a single `dataset/` folder in the workspace. If you want to retrain, you can create a custom `dataset/` folder or point the training command to a custom `data.yaml` file.
 
 ## Requirements
 
