@@ -188,6 +188,15 @@ The program can generate:
 - processed video outputs when `--save` is enabled
 - training checkpoints and logs under the `runs/` directory
 
+### Example detection result
+
+This result was generated using the recommended model checkpoint: `merged_best.pt`.
+
+Input image: `ffb_check.jpg`  
+Output image: `ffb_check_hasil.png`
+
+![FFB detection result using merged_best.pt](ffb_check_hasil.png)
+
 ## Notes
 
 - The default `yolo11n.pt` model is a general pretrained COCO model and is not specialized for palm fruit detection.
