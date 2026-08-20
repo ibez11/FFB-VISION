@@ -1,0 +1,63 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter / editor
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model artifacts and training outputs
+*.pt
+*.weights
+*.onnx
+*.engine
+*.tflite
+*.bin
+runs/
+checkpoints/
+wandb/
+mlruns/
+
+# Dataset files (optional large data)
+# Keep YAML config only if needed, but ignore actual image/label data.
+dataset/images/
+dataset/labels/
+!dataset/dataset.yaml
+
+# Logs and temporary files
+*.log
+train_log*.txt
+*.tmp
+*.cache
+
+# Output images/videos generated during inference
+*_hasil.*
+*.mp4
+*.avi
+*.mov
+
+# Local environment files
+.env
+.env.*
+
+# Test / coverage artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
