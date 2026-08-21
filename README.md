@@ -1,8 +1,13 @@
 # Janjang Vision
 
-Janjang Vision is an AI-powered project for detecting and counting oil palm fresh fruit bunches (FFB), locally known as "janjang", using computer vision and YOLO object detection.
+Janjang Vision is an AI-powered project for detecting and counting oil palm fresh fruit bunches (FFB), locally known as "janjang", using computer vision and YOLO object detection. **Now with ripeness classification!**
 
-The system is designed to help automate fruit counting in palm oil farms, inspection workflows, and image/video-based monitoring. It supports image detection, video processing, live camera detection, and custom model training using a YOLO-compatible dataset.
+The system can:
+- **Detect** fruit bunch positions (bounding boxes)
+- **Classify** ripeness level: **ripe**, **unripe**, or **underripe**
+- Automate fruit counting and ripeness assessment in palm oil farms, inspection workflows, and video monitoring.
+
+It supports image detection, video processing, live camera detection, and custom model training using YOLO-compatible datasets.
 
 ## Project Overview
 
@@ -18,15 +23,18 @@ The main workflow includes:
 
 ## Features
 
-- YOLO-based object detection for palm fruit bunches
+- **Multi-class detection + classification**
+  - Detect oil palm fruit bunch positions (bounding box)
+  - Classify ripeness: `ripe`, `unripe`, `underripe`
+- YOLO-based object detection
 - Image counting from JPG/PNG inputs
 - Video counting from MP4 or other OpenCV-supported video sources
-- Real-time camera detection
+- Real-time camera detection with ripeness overlay
 - Automatic class detection for relevant labels such as `janjang`, `tbs`, `ffb`, `bunch`, and similar names
 - Confidence threshold control using `--conf`
 - Custom class filtering using `--classes`
 - Model training via `dataset.yaml`
-- Output saving for processed images and videos
+- Output saving for processed images and videos with ripeness annotations
 
 ## Project Structure
 
@@ -66,72 +74,73 @@ pip install ultralytics opencv-python
 
 ## Download Model from Google Drive
 
-The recommended trained model is stored in Google Drive and is named `merged_best.pt`.
+The recommended trained models are stored in Google Drive:
 
-- Google Drive folder: https://drive.google.com/drive/folders/1TpYLqy0NLaXq-XeoPMsomkt-K25bPUtk?hl=ID
+- **merged_best.pt** - Detection model (count only)
+  - Google Drive folder: https://drive.google.com/drive/folders/1TpYLqy0NLaXq-XeoPMsomkt-K25bPUtk?hl=ID
+  - Use for: Quick counting without ripeness info
+  
+- **merged_ripeness_best.pt** - Detection + Ripeness Classification model (RECOMMENDED)
+  - Same folder as above
+  - Use for: Detect + classify ripeness (ripe/unripe/underripe)
 
-Download the file `merged_best.pt` and place it in the project root folder so the script can load it directly.
+Download either file and place in the project root folder.
 
-Example:
+### Using merged_ripeness_best.pt (with ripeness)
+
+```bash
+python janjang_counter.py foto.jpg --model merged_ripeness_best.pt --conf 0.25
+```
+
+Output will show:
+- Bounding boxes for each janjang
+- Ripeness label: `ripe` (green), `unripe` (yellow), `underripe` (red)
+- Count by ripeness class
+
+### Using merged_best.pt (detection only)
 
 ```bash
 python janjang_counter.py foto.jpg --model merged_best.pt --conf 0.25
 ```
 
-This is the recommended model to use for validation and inference when you want the latest merged training result.
+## Download Datasets from Roboflow
 
-## Download Dataset from Roboflow
+This project uses multiple datasets for detection and ripeness classification:
 
-This project can use the public Roboflow oil palm fruit bunch dataset:
+### Detection datasets (3 datasets):
+1. **bunchtest** - 237 close-up FFB images
+2. **nazwa** - 2,400+ plantation scene images
+3. **gcstech** - 2,700+ images with ripeness labels (Decayed, Fully Ripe, Immature, Over Ripe, Partially Ripe)
+   - https://universe.roboflow.com/gcstech/oil-palm-fruit-bunch-vlynl/dataset/2
 
-- https://universe.roboflow.com/gcstech/oil-palm-fruit-bunch-vlynl/dataset/2
+### Ripeness classification dataset (1 dataset):
+4. **workspace-alwjv palm-oil-ripeness-classification** - Additional ripeness data
+   - https://universe.roboflow.com/workspace-alwjv/palm-oil-ripeness-classification-iqmds
 
-Use it as the main data source for retraining or comparing with the existing model checkpoints such as `model_1.pt`.
+### Training with merged datasets
 
-Recommended workflow:
+Use the **[janjang_train_ripeness.ipynb](janjang_train_ripeness.ipynb)** notebook to:
+- Download all 4 datasets
+- Merge and remap ripeness classes to: `ripe`, `unripe`, `underripe`
+- Train a multi-class detection+classification model
 
-1. Open the dataset page above.
-2. Click the download button.
-3. Choose export format: `YOLOv8` (or `YOLOv5/YOLOv8` depending on the export option).
-4. Download and unzip the package into the project folder.
-5. Make sure the extracted folder contains `data.yaml`, `train`, `val`, and `test` folders.
-6. Point the training command to the downloaded YAML file.
-
-Example:
-
-```bash
-python janjang_counter.py --train dataset/data.yaml --epochs 100 --imgsz 640
-```
-
-If the exported directory does not match the project structure, move the files so that they look like this:
-
-```text
-project/
-├── dataset/
-│   ├── data.yaml
-│   ├── images/
-│   └── labels/
-├── janjang_counter.py
-├── best.pt
-└── model_1.pt
-```
-
-This dataset is suitable for fruit bunch detection and can be used to retrain the model, validate new checkpoints, or compare against the current `best.pt` and `model_1.pt` results.
 
 ## Quick Start
 
-### 1. Run object detection on an image
+### 1. Run object detection on an image (with ripeness)
 
-Recommended model:
+Recommended - use ripeness model:
+
+```bash
+python janjang_counter.py image.jpg --model merged_ripeness_best.pt --conf 0.25
+```
+
+This will output bounding boxes with ripeness labels (ripe/unripe/underripe).
+
+Alternatively, detection-only model:
 
 ```bash
 python janjang_counter.py image.jpg --model merged_best.pt --conf 0.25
-```
-
-If you want to use an older checkpoint instead:
-
-```bash
-python janjang_counter.py image.jpg --model gcstech.pt --classes 0,1,2,3,4 --conf 0.25
 ```
 
 ### 2. Run detection on a video
