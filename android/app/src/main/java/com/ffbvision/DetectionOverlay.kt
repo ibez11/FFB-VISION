@@ -15,7 +15,7 @@ class DetectionOverlay @JvmOverloads constructor(
 
     private val boxPaint = Paint().apply {
         style = Paint.Style.STROKE
-        strokeWidth = 2f
+        strokeWidth = 5f
         color = Color.GREEN
     }
 
@@ -61,10 +61,21 @@ class DetectionOverlay @JvmOverloads constructor(
 
         for (detection in detections) {
 
-            val left = detection.left * scale + offsetX
-            val top = detection.top * scale + offsetY
-            val right = detection.right * scale + offsetX
-            val bottom = detection.bottom * scale + offsetY
+            var left = detection.left * scale + offsetX
+            var top = detection.top * scale + offsetY
+            var right = detection.right * scale + offsetX
+            var bottom = detection.bottom * scale + offsetY
+
+            // Shrink box by 50% towards center
+            val boxWidth = right - left
+            val boxHeight = bottom - top
+            val shrinkX = boxWidth * 0.25f
+            val shrinkY = boxHeight * 0.25f
+            
+            left += shrinkX
+            top += shrinkY
+            right -= shrinkX
+            bottom -= shrinkY
 
             canvas.drawRect(
                 left,
