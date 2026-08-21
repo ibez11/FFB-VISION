@@ -67,6 +67,7 @@ android/.idea/
 android/*.iml
 android/local.properties
 android/build/
+android/app/build/
 android/captures/
 android/.externalNativeBuild/
 android/.cxx/
@@ -77,10 +78,10 @@ android/app/release/
 android/app/debug/
 android/.DS_Store
 
-# Gradle wrapper (optional - uncomment if you want to commit gradle wrapper)
-# !android/gradlew
-# !android/gradlew.bat
-# !android/gradle/
+# Gradle - INCLUDE wrapper, EXCLUDE cache
+!android/gradlew
+!android/gradlew.bat
+!android/gradle/
 
 # Android Studio specific files
 android/*.apk
